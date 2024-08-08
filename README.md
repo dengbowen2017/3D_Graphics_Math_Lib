@@ -1,2 +1,2 @@
-# 3D_Graphics_Math_Lib
-a simple 3d graphics math library based on SIMD
+# 3D Graphics Math Library
+a simple 3d graphics math library based on SIMD (header file only)
