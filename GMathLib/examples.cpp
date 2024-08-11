@@ -8,21 +8,22 @@
 
 int main()
 {
-	GMath::Vector4 x(1.0f, 2.0f, 3.0f, 4.0f);
-	GMath::Vector4 y(2.0f, 2.0f, 3.0f, 4.0f);
-	GMath::Vector4 z(0.0f);
+	//GMath::Vector3A vec1(1);
+	//__m128 b = *(__m128*)&vec1;
 
-	//__m128 a = _mm_loadu_ps(&x.x);
-	//__m128 b = _mm_loadu_ps(&y.x);
-	//__m128 c = _mm_add_ps(a, b);
-	//_mm_storeu_ps(&z.x, c);
+	GMath::Vector3A v1(3.0f);
+	GMath::Vector4 v2(2.0f);
+	GMath::Vector4 v;
 
-	z = y;
+	//auto start = std::chrono::high_resolution_clock::now();
 
-	std::cout << z.x << std::endl;
-	std::cout << z.y << std::endl;
-	std::cout << z.z << std::endl;
-	std::cout << z.w << std::endl;
+	__m128 b = GMath::LoadVector3A(&v1);
+	__m128 c = GMath::LoadVector4(&v2);
+	__m128 res = _mm_mul_ps(b, c);
+	GMath::StoreVector4(&v, res);
 
+	//auto end = std::chrono::high_resolution_clock::now();
+	//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+	//std::cout << duration.count() << " microseconds" << std::endl;
 	return 0;
 }
