@@ -2,4 +2,6 @@
 
 project ("GMathLib")
 
-add_subdirectory ("GMathLib")
+add_executable(${PROJECT_NAME} "src/examples.cpp" "include/GMathLib.h")
+
+target_include_directories(${PROJECT_NAME} PUBLIC "include")
