@@ -5,7 +5,7 @@ A *constexpr integral value* can be used wherever a const integer is required, s
 ### constexpr function
 A *constexpr function* is one whose return value is computable at compile time when consuming code requires it. 
 
-A *inline function* is used to suggest to the compiler that it should attempt to expand a function in place, rather than calling it through the usual function call mechanism. This can lead to performance improvements, especially for very small, frequently called functions, by reducing the overhead associated with function calls.
+A *inline function* is used to suggest to the compiler that it should attempt to expand a function in place, rather than calling it through the usual function call mechanism. This can lead to performance improvements, especially for very small, frequently called functions, by reducing the overhead associated with function calls. Since the inline keyword is just a suggestion to the compiler, the compiler may ignore it if the function is too large or complex.
 
 So, a *constexpr function* is computed at compile time while a *inline function* just avoids creating/deleting stack frame at run time, which means a *constexpr function* will be faster than a *inline function*.
 

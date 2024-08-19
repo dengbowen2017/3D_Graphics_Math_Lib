@@ -130,21 +130,20 @@ namespace GMath
 	extern const __declspec(selectany) __m128 g_MatIdentityR1 = _mm_set_ps(0, 0, 1.0f, 0);
 	extern const __declspec(selectany) __m128 g_MatIdentityR2 = _mm_set_ps(0, 1.0f, 0, 0);
 	extern const __declspec(selectany) __m128 g_MatIdentityR3 = _mm_set_ps(1.0f, 0, 0, 0);
-
-																						//w			//z			//y			//x						
-	extern const __declspec(selectany) __m128 g_VecMaskX      = *(__m128*)&_mm_set_epi32(0x00000000, 0x00000000, 0x00000000, 0xFFFFFFFF);
-	extern const __declspec(selectany) __m128 g_VecMaskY      = *(__m128*)&_mm_set_epi32(0x00000000, 0x00000000, 0xFFFFFFFF, 0x00000000);
-	extern const __declspec(selectany) __m128 g_VecMaskZ      = *(__m128*)&_mm_set_epi32(0x00000000, 0xFFFFFFFF, 0x00000000, 0x00000000);
-	extern const __declspec(selectany) __m128 g_VecMaskW      = *(__m128*)&_mm_set_epi32(0xFFFFFFFF, 0x00000000, 0x00000000, 0x00000000);
-	extern const __declspec(selectany) __m128 g_VecMaskZW     = *(__m128*)&_mm_set_epi32(0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0x00000000);
-	extern const __declspec(selectany) __m128 g_VecMaskXYZ    = *(__m128*)&_mm_set_epi32(0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF);
+						
+	extern const __declspec(selectany) __m128 g_VecMaskX	= *(__m128*) & _mm_set_epi32(0x00000000, 0x00000000, 0x00000000, 0xFFFFFFFF); // wzyx
+	extern const __declspec(selectany) __m128 g_VecMaskY	= *(__m128*) & _mm_set_epi32(0x00000000, 0x00000000, 0xFFFFFFFF, 0x00000000);
+	extern const __declspec(selectany) __m128 g_VecMaskZ	= *(__m128*) & _mm_set_epi32(0x00000000, 0xFFFFFFFF, 0x00000000, 0x00000000);
+	extern const __declspec(selectany) __m128 g_VecMaskW	= *(__m128*) & _mm_set_epi32(0xFFFFFFFF, 0x00000000, 0x00000000, 0x00000000);
+	extern const __declspec(selectany) __m128 g_VecMaskZW	= *(__m128*) & _mm_set_epi32(0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0x00000000);
+	extern const __declspec(selectany) __m128 g_VecMaskXYZ	= *(__m128*) & _mm_set_epi32(0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF);
 
 	// Miscellaneous Operations
-	float ScalarSin(float Radians) noexcept { return sin(Radians); }
-	float ScalarCos(float Radians) noexcept { return cos(Radians); }
+	inline float ScalarSin(float Radians) noexcept { return sin(Radians); }
+	inline float ScalarCos(float Radians) noexcept { return cos(Radians); }
 
 	// Load Operations
-	MVector __vectorcall LoadVector3(const Vector3* p_src) noexcept
+	inline MVector __vectorcall LoadVector3(const Vector3* p_src) noexcept
 	{
 		assert(p_src);
 		MVector V;
@@ -154,7 +153,7 @@ namespace GMath
 		return V;
 	}
 
-	MVector __vectorcall LoadVector3A(const Vector3A* p_src) noexcept
+	inline MVector __vectorcall LoadVector3A(const Vector3A* p_src) noexcept
 	{
 		assert(p_src);
 		assert((reinterpret_cast<uintptr_t>(p_src) & 0xF) == 0);
@@ -164,7 +163,7 @@ namespace GMath
 		return V;
 	}
 
-	MVector __vectorcall LoadVector4(const Vector4* p_src) noexcept
+	inline MVector __vectorcall LoadVector4(const Vector4* p_src) noexcept
 	{
 		assert(p_src);
 		MVector V;
@@ -172,7 +171,7 @@ namespace GMath
 		return V;
 	}
 
-	MVector __vectorcall LoadVector4A(const Vector4A* p_src) noexcept
+	inline MVector __vectorcall LoadVector4A(const Vector4A* p_src) noexcept
 	{
 		assert(p_src);
 		assert((reinterpret_cast<uintptr_t>(p_src) & 0xF) == 0);
@@ -181,7 +180,7 @@ namespace GMath
 		return V;
 	}
 
-	MMatrix __vectorcall LoadMatrix3x3(const Matrix3x3* p_src) noexcept
+	inline MMatrix __vectorcall LoadMatrix3x3(const Matrix3x3* p_src) noexcept
 	{
 		assert(p_src);
 		__m128 Z = _mm_setzero_ps();
@@ -204,7 +203,7 @@ namespace GMath
 		return M;
 	}
 
-	MMatrix __vectorcall LoadMatrix4x4(const Matrix4x4* p_src) noexcept
+	inline MMatrix __vectorcall LoadMatrix4x4(const Matrix4x4* p_src) noexcept
 	{
 		assert(p_src);
 		MMatrix M;
@@ -215,7 +214,7 @@ namespace GMath
 		return M;
 	}
 
-	MMatrix __vectorcall LoadMatrix4x4A(const Matrix4x4A* p_src) noexcept
+	inline MMatrix __vectorcall LoadMatrix4x4A(const Matrix4x4A* p_src) noexcept
 	{
 		assert(p_src);
 		assert((reinterpret_cast<uintptr_t>(p_src) & 0xF) == 0);
@@ -228,7 +227,7 @@ namespace GMath
 	}
 
 	// Store Operations
-	void __vectorcall StoreVector3(Vector3* p_des, const MVector V) noexcept
+	inline void __vectorcall StoreVector3(Vector3* p_des, const MVector V) noexcept
 	{
 		assert(p_des);
 		_mm_store_sd(reinterpret_cast<double*>(p_des), _mm_castps_pd(V.v));
@@ -236,7 +235,7 @@ namespace GMath
 		_mm_store_ss(&p_des->z, z);
 	}
 
-	void __vectorcall StoreVector3A(Vector3A* p_des, const MVector V) noexcept
+	inline void __vectorcall StoreVector3A(Vector3A* p_des, const MVector V) noexcept
 	{
 		assert(p_des);
 		assert((reinterpret_cast<uintptr_t>(p_des) & 0xF) == 0);
@@ -245,20 +244,20 @@ namespace GMath
 		_mm_store_ss(&p_des->z, z);
 	}
 
-	void __vectorcall StoreVector4(Vector4* p_des, const MVector V) noexcept
+	inline void __vectorcall StoreVector4(Vector4* p_des, const MVector V) noexcept
 	{
 		assert(p_des);
 		_mm_storeu_ps(&p_des->x, V.v);
 	}
 
-	void __vectorcall StoreVector4A(Vector4A* p_des, const MVector V) noexcept
+	inline void __vectorcall StoreVector4A(Vector4A* p_des, const MVector V) noexcept
 	{
 		assert(p_des);
 		assert((reinterpret_cast<uintptr_t>(p_des) & 0xF) == 0);
 		_mm_store_ps(&p_des->x, V.v);
 	}
 
-	void __vectorcall StoreMatrix3x3(Matrix3x3* p_des, const MMatrix M) noexcept
+	inline void __vectorcall StoreMatrix3x3(Matrix3x3* p_des, const MMatrix M) noexcept
 	{
 		assert(p_des);
 		__m128 vTemp1 = M.r[0];
@@ -273,7 +272,7 @@ namespace GMath
 		_mm_store_ss(&p_des->m[2][2], vTemp3);
 	}
 
-	void __vectorcall StoreMatrix4x4(Matrix4x4* p_des, const MMatrix M) noexcept
+	inline void __vectorcall StoreMatrix4x4(Matrix4x4* p_des, const MMatrix M) noexcept
 	{
 		assert(p_des);
 		_mm_storeu_ps(&p_des->m[0][0], M.r[0]);
@@ -282,7 +281,7 @@ namespace GMath
 		_mm_storeu_ps(&p_des->m[3][0], M.r[3]);
 	}
 
-	void __vectorcall StoreMatrix4x4A(Matrix4x4A* p_des, const MMatrix M) noexcept
+	inline void __vectorcall StoreMatrix4x4A(Matrix4x4A* p_des, const MMatrix M) noexcept
 	{
 		assert(p_des);
 		assert((reinterpret_cast<uintptr_t>(p_des) & 0xF) == 0);
@@ -293,7 +292,7 @@ namespace GMath
 	}
 
 	// Vector Operations
-	MVector __vectorcall VectorNegate(const MVector V) noexcept
+	inline MVector __vectorcall VectorNegate(const MVector V) noexcept
 	{
 		MVector vRes;
 		__m128 Z = _mm_setzero_ps();
@@ -301,35 +300,35 @@ namespace GMath
 		return vRes;
 	}
 
-	MVector __vectorcall VectorAdd(const MVector V1, const MVector V2) noexcept
+	inline MVector __vectorcall VectorAdd(const MVector V1, const MVector V2) noexcept
 	{
 		MVector vRes;
 		vRes.v = _mm_add_ps(V1.v, V2.v);
 		return vRes;
 	}
 
-	MVector __vectorcall VectorSub(const MVector V1, const MVector V2) noexcept
+	inline MVector __vectorcall VectorSub(const MVector V1, const MVector V2) noexcept
 	{
 		MVector vRes;
 		vRes.v = _mm_sub_ps(V1.v, V2.v);
 		return vRes;
 	}
 
-	MVector __vectorcall VectorMul(const MVector V1, const MVector V2) noexcept
+	inline MVector __vectorcall VectorMul(const MVector V1, const MVector V2) noexcept
 	{
 		MVector vRes;
 		vRes.v = _mm_mul_ps(V1.v, V2.v);
 		return vRes;
 	}
 
-	MVector __vectorcall VectorDiv(const MVector V1, const MVector V2) noexcept
+	inline MVector __vectorcall VectorDiv(const MVector V1, const MVector V2) noexcept
 	{
 		MVector vRes;
 		vRes.v = _mm_div_ps(V1.v, V2.v);
 		return vRes;
 	}
 
-	MVector __vectorcall VectorSum(const MVector V) noexcept
+	inline MVector __vectorcall VectorSum(const MVector V) noexcept
 	{
 		MVector vRes;
 		__m128 vTemp = _mm_hadd_ps(V.v, V.v);
@@ -337,7 +336,7 @@ namespace GMath
 		return vRes;
 	}
 
-	MVector __vectorcall VectorScale(const MVector V, float S) noexcept
+	inline MVector __vectorcall VectorScale(const MVector V, float S) noexcept
 	{
 		MVector vRes;
 		__m128 vS = _mm_set_ps1(S);
@@ -345,7 +344,7 @@ namespace GMath
 		return vRes;
 	}
 
-	MVector __vectorcall VectorNormalize(const MVector V) noexcept
+	inline MVector __vectorcall VectorNormalize(const MVector V) noexcept
 	{
 		MVector vRes;
 		__m128 vLengthSq = _mm_dp_ps(V.v, V.v, 0xff);
@@ -357,14 +356,14 @@ namespace GMath
 		return vRes;
 	}
 
-	MVector __vectorcall VectorDot(const MVector V1, const MVector V2) noexcept
+	inline MVector __vectorcall VectorDot(const MVector V1, const MVector V2) noexcept
 	{
 		MVector vRes;
 		vRes.v = _mm_dp_ps(V1.v, V2.v, 0xff);
 		return vRes;
 	}
 
-	MVector __vectorcall VectorCross(const MVector V1, const MVector V2) noexcept
+	inline MVector __vectorcall VectorCross(const MVector V1, const MVector V2) noexcept
 	{
 		MVector vRes;
 		__m128 vTemp1 = _mm_shuffle_ps(V1.v, V1.v, _MM_SHUFFLE(3, 0, 2, 1));
@@ -378,75 +377,75 @@ namespace GMath
 	}
 
 	// Vector Overloads
-	MVector MVector::operator-() const noexcept
+	inline MVector MVector::operator-() const noexcept
 	{
 		return VectorNegate(*this);
 	}
 
-	MVector& __vectorcall MVector::operator+=(const MVector V) noexcept
+	inline MVector& __vectorcall MVector::operator+=(const MVector V) noexcept
 	{
 		this->v = _mm_add_ps(this->v, V.v);
 		return *this;
 	}
 
-	MVector& __vectorcall MVector::operator-=(const MVector V) noexcept
+	inline MVector& __vectorcall MVector::operator-=(const MVector V) noexcept
 	{
 		this->v = _mm_sub_ps(this->v, V.v);
 		return *this;
 	}
 
-	MVector& __vectorcall MVector::operator*=(const MVector V) noexcept
+	inline MVector& __vectorcall MVector::operator*=(const MVector V) noexcept
 	{
 		this->v = _mm_mul_ps(this->v, V.v);
 		return *this;
 	}
 
-	MVector& __vectorcall MVector::operator/=(const MVector V) noexcept
+	inline MVector& __vectorcall MVector::operator/=(const MVector V) noexcept
 	{
 		this->v = _mm_div_ps(this->v, V.v);
 		return *this;
 	}
 
-	MVector& MVector::operator*=(float S) noexcept
+	inline MVector& MVector::operator*=(float S) noexcept
 	{
 		__m128 vS = _mm_set_ps1(S);
 		this->v = _mm_mul_ps(this->v, vS);
 		return *this;
 	}
 
-	MVector& MVector::operator/=(float S) noexcept
+	inline MVector& MVector::operator/=(float S) noexcept
 	{
 		__m128 vS = _mm_set_ps1(S);
 		this->v = _mm_div_ps(this->v, vS);
 		return *this;
 	}
 
-	MVector __vectorcall MVector::operator+(const MVector V) const noexcept
+	inline MVector __vectorcall MVector::operator+(const MVector V) const noexcept
 	{
 		return VectorAdd(*this, V);
 	}
 
-	MVector __vectorcall MVector::operator-(const MVector V) const noexcept
+	inline MVector __vectorcall MVector::operator-(const MVector V) const noexcept
 	{
 		return VectorSub(*this, V);
 	}
 
-	MVector __vectorcall MVector::operator*(const MVector V) const noexcept
+	inline MVector __vectorcall MVector::operator*(const MVector V) const noexcept
 	{
 		return VectorMul(*this, V);
 	}
 
-	MVector __vectorcall MVector::operator/(const MVector V) const noexcept
+	inline MVector __vectorcall MVector::operator/(const MVector V) const noexcept
 	{
 		return VectorDiv(*this, V);
 	}
 
-	MVector MVector::operator*(float S) const noexcept
+	inline MVector MVector::operator*(float S) const noexcept
 	{
 		return VectorScale(*this, S);
 	}
 
-	MVector MVector::operator/(float S) const noexcept
+	inline MVector MVector::operator/(float S) const noexcept
 	{
 		MVector vRes;
 		__m128 vS = _mm_set_ps1(S);
@@ -454,13 +453,37 @@ namespace GMath
 		return vRes;
 	}
 
-	MVector __vectorcall operator*(float S, const MVector V) noexcept
+	inline MVector __vectorcall operator*(float S, const MVector V) noexcept
 	{
 		return VectorScale(V, S);
 	}
 
 	// Matrix Operation
-	MMatrix __vectorcall MatrixMul(const MMatrix M1, const MMatrix& M2) noexcept
+	inline MMatrix __vectorcall MatrixTranspose(const MMatrix M) noexcept
+	{
+		MMatrix mRes;
+		// x.x,x.y,y.x,y.y
+		__m128 vTemp1 = _mm_shuffle_ps(M.r[0], M.r[1], _MM_SHUFFLE(1, 0, 1, 0));
+		// x.z,x.w,y.z,y.w
+		__m128 vTemp3 = _mm_shuffle_ps(M.r[0], M.r[1], _MM_SHUFFLE(3, 2, 3, 2));
+		// z.x,z.y,w.x,w.y
+		__m128 vTemp2 = _mm_shuffle_ps(M.r[2], M.r[3], _MM_SHUFFLE(1, 0, 1, 0));
+		// z.z,z.w,w.z,w.w
+		__m128 vTemp4 = _mm_shuffle_ps(M.r[2], M.r[3], _MM_SHUFFLE(3, 2, 3, 2));
+
+		// x.x,y.x,z.x,w.x
+		mRes.r[0] = _mm_shuffle_ps(vTemp1, vTemp2, _MM_SHUFFLE(2, 0, 2, 0));
+		// x.y,y.y,z.y,w.y
+		mRes.r[1] = _mm_shuffle_ps(vTemp1, vTemp2, _MM_SHUFFLE(3, 1, 3, 1));
+		// x.z,y.z,z.z,w.z
+		mRes.r[2] = _mm_shuffle_ps(vTemp3, vTemp4, _MM_SHUFFLE(2, 0, 2, 0));
+		// x.w,y.w,z.w,w.w
+		mRes.r[3] = _mm_shuffle_ps(vTemp3, vTemp4, _MM_SHUFFLE(3, 1, 3, 1));
+
+		return mRes;
+	}
+
+	inline MMatrix __vectorcall MatrixMul(const MMatrix M1, const MMatrix& M2) noexcept
 	{
 		MMatrix mRes;
 
@@ -526,7 +549,7 @@ namespace GMath
 		return mRes;
 	}
 
-	MMatrix __vectorcall MatrixLookAtRH(const MVector EyePos, const MVector FocusPos, const MVector UpDir) noexcept
+	inline MMatrix __vectorcall MatrixLookAtRH(const MVector EyePos, const MVector FocusPos, const MVector UpDir) noexcept
 	{
 		MVector R2 = VectorNormalize(FocusPos - EyePos);
 		MVector R0 = VectorNormalize(VectorCross(R2, UpDir));
@@ -548,10 +571,10 @@ namespace GMath
 		return M;
 	}
 
-	MMatrix __vectorcall MatrixPerspectiveFovRH(float FovY, float AspectRation, float NearZ, float FarZ) noexcept
+	inline MMatrix __vectorcall MatrixPerspectiveFovRH(float FovY, float AspectRation, float NearZ, float FarZ) noexcept
 	{
 		float fRange = FarZ / (NearZ - FarZ);
-		float Height = ScalarCos(FovY) / ScalarSin(FovY);
+		float Height = ScalarCos(FovY / 2) / ScalarSin(FovY / 2);
 		__m128 V = _mm_set_ps(fRange * NearZ, fRange, Height, Height / AspectRation);
 
 		MMatrix M;
@@ -563,7 +586,7 @@ namespace GMath
 		return M;
 	}
 
-	MMatrix __vectorcall MatrixOrthographicRH(float ViewWidth, float ViewHeight, float NearZ, float FarZ) noexcept
+	inline MMatrix __vectorcall MatrixOrthographicRH(float ViewWidth, float ViewHeight, float NearZ, float FarZ) noexcept
 	{
 		float fRange = 1.0f / (NearZ - FarZ);
 		__m128 V = _mm_set_ps(fRange * NearZ, fRange, 2.0f / ViewHeight, 2.0f / ViewWidth);
@@ -578,7 +601,7 @@ namespace GMath
 	}
 
 	// Matrix Overloads
-	MMatrix MMatrix::operator-() const noexcept
+	inline MMatrix MMatrix::operator-() const noexcept
 	{
 		MMatrix M;
 		__m128 Z = _mm_setzero_ps();
@@ -589,7 +612,7 @@ namespace GMath
 		return M;
 	}
 
-	MMatrix& __vectorcall MMatrix::operator+=(const MMatrix M) noexcept
+	inline MMatrix& __vectorcall MMatrix::operator+=(const MMatrix M) noexcept
 	{
 		this->r[0] = _mm_add_ps(this->r[0], M.r[0]);
 		this->r[1] = _mm_add_ps(this->r[0], M.r[1]);
@@ -598,7 +621,7 @@ namespace GMath
 		return *this;
 	}
 
-	MMatrix& __vectorcall MMatrix::operator-=(const MMatrix M) noexcept
+	inline MMatrix& __vectorcall MMatrix::operator-=(const MMatrix M) noexcept
 	{
 		this->r[0] = _mm_sub_ps(this->r[0], M.r[0]);
 		this->r[1] = _mm_sub_ps(this->r[0], M.r[1]);
@@ -607,13 +630,13 @@ namespace GMath
 		return *this;
 	}
 
-	MMatrix& __vectorcall MMatrix::operator*=(const MMatrix M) noexcept
+	inline MMatrix& __vectorcall MMatrix::operator*=(const MMatrix M) noexcept
 	{
 		*this = MatrixMul(*this, M);
 		return *this;
 	}
 
-	MMatrix& MMatrix::operator*=(float S) noexcept
+	inline MMatrix& MMatrix::operator*=(float S) noexcept
 	{
 		__m128 vS = _mm_set_ps1(S);
 		this->r[0] = _mm_mul_ps(this->r[0], vS);
@@ -623,7 +646,7 @@ namespace GMath
 		return *this;
 	}
 
-	MMatrix& MMatrix::operator/=(float S) noexcept
+	inline MMatrix& MMatrix::operator/=(float S) noexcept
 	{
 		__m128 vS = _mm_set_ps1(S);
 		this->r[0] = _mm_div_ps(this->r[0], vS);
@@ -633,7 +656,7 @@ namespace GMath
 		return *this;
 	}
 
-	MMatrix __vectorcall MMatrix::operator+(const MMatrix M) const noexcept
+	inline MMatrix __vectorcall MMatrix::operator+(const MMatrix M) const noexcept
 	{
 		MMatrix mRes;
 		mRes.r[0] = _mm_add_ps(this->r[0], M.r[0]);
@@ -643,7 +666,7 @@ namespace GMath
 		return mRes;
 	}
 
-	MMatrix __vectorcall MMatrix::operator-(const MMatrix M) const noexcept
+	inline MMatrix __vectorcall MMatrix::operator-(const MMatrix M) const noexcept
 	{
 		MMatrix mRes;
 		mRes.r[0] = _mm_sub_ps(this->r[0], M.r[0]);
@@ -653,12 +676,12 @@ namespace GMath
 		return mRes;
 	}
 
-	MMatrix __vectorcall MMatrix::operator*(const MMatrix M) const noexcept
+	inline MMatrix __vectorcall MMatrix::operator*(const MMatrix M) const noexcept
 	{
 		return MatrixMul(*this, M);
 	}
 
-	MMatrix MMatrix::operator*(float S) const noexcept
+	inline MMatrix MMatrix::operator*(float S) const noexcept
 	{
 		MMatrix mRes;
 		__m128 vS = _mm_set_ps1(S);
@@ -669,7 +692,7 @@ namespace GMath
 		return mRes;
 	}
 
-	MMatrix MMatrix::operator/(float S) const noexcept
+	inline MMatrix MMatrix::operator/(float S) const noexcept
 	{
 		MMatrix mRes;
 		__m128 vS = _mm_set_ps1(S);
@@ -680,7 +703,7 @@ namespace GMath
 		return mRes;
 	}
 
-	MMatrix __vectorcall operator*(float S, const MMatrix M) noexcept
+	inline MMatrix __vectorcall operator*(float S, const MMatrix M) noexcept
 	{
 		MMatrix mRes;
 		__m128 vS = _mm_set_ps1(S);
@@ -691,8 +714,8 @@ namespace GMath
 		return mRes;
 	}
 
-#include "GMathVector.inl"
-#include "GMathMatrix.inl"
-#include "GMathQuaternion.inl"
+	//#include "GMathVector.inl"
+	//#include "GMathMatrix.inl"
+	//#include "GMathQuaternion.inl"
 
 }
