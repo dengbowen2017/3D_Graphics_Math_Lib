@@ -9,6 +9,11 @@ A *inline function* is used to suggest to the compiler that it should attempt to
 
 So, a *constexpr function* is computed at compile time while a *inline function* just avoids creating/deleting stack frame at run time, which means a *constexpr function* will be faster than a *inline function*.
 
+### more about inline function
+Although the inline keyword is just a suggestion to the compiler, the compiler may ignore it if the function is too large or complex, you do have to declare a function to be inline when you want to define a function in a header file and include the header file in different source files. If you don't do so, you will violate the One Definition Rule (ODR) in C++. If you define the function in a header file and include that header in multiple .cpp files, the compiler will generate a separate definition of the function in each .cpp file, resulting in multiple definitions during the linking stage.
+
+What's more, a constexpr function has the same feature.
+
 ### __vectorcall
 Usually, the procedure of calling a function will include many steps
 - set up stack frame
@@ -73,8 +78,34 @@ There are two ways. One is using _mm_set_ps. The other one is using initializer 
 slow (high latency about 6 CPU cycles) but high throughput (about 3 Instruction at 1 CPU cycle)
 
 ### Unpack vs. Move
-assume that A: a4 a3 a2 a1, B: b4 b3 b2 b1
+assume that 
 
-Unpackhi: b4 a4 b3 a3, Unpacklo: b2 a2 b1 a1
+A: a3 a2 a1 a0, B: b3 b2 b1 b0
 
-movehl: a4 a3 b4 b3, movelh: b2 b1 a2 a1
+unpackhi: b3 a3 b2 a2, unpacklo: b1 a1 b0 a0
+
+movehl: a3 a2 b3 b2, movelh: b1 b0 a1 a0
+
+### Shuffle
+assume that 
+
+A: a3 a2 a1 a0, B: b3 b2 b1 b0
+
+shuffle: b0/b1/b2/b3 b0/b1/b2/b3 a0/a1/a2/a3 a0/a1/a2/a3 
+
+use control bits to choose the element or use macro _MM_SHUFFLE(fp3,fp2,fp1,fp0)
+
+For example, _MM_SHUFFLE(3,0,2,1) == b3 b0 a2 a1
+
+### Permute
+assume that
+
+A: a3 a2 a1 a0
+
+permute: a0/a1/a2/a3 a0/a1/a2/a3 a0/a1/a2/a3 a0/a1/a2/a3
+
+use control bits to choose the element
+
+For example, 0x4D == a1 a0 a3 a1. You can use _MM_PERM_ENUM to replace the control bits if your cpu supports AVX512.
+
+So if you pass two same __m128 to a shuflle, it actually becomes a permute. Shuffle is supported since SSE while Permute is supported since AVX and these two operations perform almost the same.
