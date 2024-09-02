@@ -87,6 +87,15 @@ namespace GMath
 		MVector __vectorcall operator*(const MVector V) const noexcept;
 	};
 
+	struct Vector2
+	{
+		float x;
+		float y;
+
+		Vector2() = default;
+		constexpr Vector2(float _x, float _y) noexcept : x(_x), y(_y) {};
+	};
+
 	struct Vector3
 	{
 		float x;
