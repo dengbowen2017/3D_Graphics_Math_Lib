@@ -379,6 +379,48 @@ inline MMatrix __vectorcall MatrixOrthographicRH(float ViewWidth, float ViewHeig
 	return M;
 }
 
+inline MMatrix __vectorcall TranslateMatrix(const MVector Pos) noexcept
+{
+	MMatrix mRes;
+	mRes.r[0] = g_MatIdentityR0;
+	mRes.r[1] = g_MatIdentityR1;
+	mRes.r[2] = g_MatIdentityR2;
+	mRes.r[3] = _mm_add_ps(Pos.v, g_MatIdentityR3);
+
+	return mRes;
+}
+
+inline MMatrix __vectorcall RotateMatrix(const MQuaternion Q) noexcept
+{
+	return QuaternionToMatrix(Q);
+}
+
+inline MMatrix __vectorcall ScaleMatrix(const MVector Scale) noexcept
+{
+	MMatrix mRes;
+	mRes.r[0] = _mm_and_ps(Scale.v, g_VecMaskX);
+	mRes.r[1] = _mm_and_ps(Scale.v, g_VecMaskY);
+	mRes.r[2] = _mm_and_ps(Scale.v, g_VecMaskZ);
+	mRes.r[3] = g_MatIdentityR3;
+
+	return mRes;
+}
+
+inline MMatrix __vectorcall ModelMatrix(const MVector Pos, const MQuaternion Q, const MVector Scale) noexcept
+{
+	MMatrix mRotate = QuaternionToMatrix(Q);
+	MMatrix mRes;
+	__m128 vTemp = _mm_shuffle_ps(Scale.v, Scale.v, _MM_SHUFFLE(0, 0, 0, 0));
+	mRes.r[0] = _mm_mul_ps(mRotate.r[0], vTemp);
+	vTemp = _mm_shuffle_ps(Scale.v, Scale.v, _MM_SHUFFLE(1, 1, 1, 1));
+	mRes.r[1] = _mm_mul_ps(mRotate.r[1], vTemp);
+	vTemp = _mm_shuffle_ps(Scale.v, Scale.v, _MM_SHUFFLE(2, 2, 2, 2));
+	mRes.r[2] = _mm_mul_ps(mRotate.r[2], vTemp);
+	mRes.r[3] = _mm_add_ps(Pos.v, g_MatIdentityR3);
+
+	return mRes;
+}
+
 // --------------------------
 // Matrix Overloads
 // --------------------------

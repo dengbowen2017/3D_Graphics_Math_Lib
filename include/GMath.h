@@ -202,6 +202,7 @@ namespace GMath
 	MVector __vectorcall LoadVector3A(const Vector3A* p_src) noexcept;
 	MVector __vectorcall LoadVector4(const Vector4* p_src) noexcept;
 	MVector __vectorcall LoadVector4A(const Vector4A* p_src) noexcept;
+
 	MMatrix __vectorcall LoadMatrix3x3(const Matrix3x3* p_src) noexcept;
 	MMatrix __vectorcall LoadMatrix4x4(const Matrix4x4* p_src) noexcept;
 	MMatrix __vectorcall LoadMatrix4x4A(const Matrix4x4A* p_src) noexcept;
@@ -223,6 +224,7 @@ namespace GMath
 	// --------------------------
 
 	float __vectorcall VectorGetX(const MVector V) noexcept;
+
 	MVector __vectorcall VectorNegate(const MVector V) noexcept;
 	MVector __vectorcall VectorAdd(const MVector V1, const MVector V2) noexcept;
 	MVector __vectorcall VectorSub(const MVector V1, const MVector V2) noexcept;
@@ -234,6 +236,7 @@ namespace GMath
 	MVector __vectorcall VectorNormalize(const MVector V) noexcept;
 	MVector __vectorcall VectorDot(const MVector V1, const MVector V2) noexcept;
 	MVector __vectorcall VectorCross(const MVector V1, const MVector V2) noexcept;
+
 	MVector __vectorcall MatrixMulVector(const MMatrix M, const MVector V) noexcept;
 	MMatrix __vectorcall VectorCrossToMatrix(const MVector V) noexcept;
 
@@ -243,8 +246,9 @@ namespace GMath
 	// -----------------------------
 
 	MQuaternion __vectorcall QuaternionMul(const MQuaternion Q1, const MQuaternion Q2) noexcept;
-	MMatrix __vectorcall QuaternionToMatrix(const MQuaternion Q) noexcept;
 	MQuaternion __vectorcall QuaternionNormalize(const MQuaternion Q) noexcept;
+	
+	MMatrix __vectorcall QuaternionToMatrix(const MQuaternion Q) noexcept;
 
 	// --------------------------
 	// Matrix Operation
@@ -252,11 +256,17 @@ namespace GMath
 
 	MMatrix __vectorcall MatrixTranspose(const MMatrix M) noexcept;
 	MMatrix __vectorcall MatrixInverse(const MMatrix M) noexcept;
-	MQuaternion __vectorcall MatrixToQuaternion(const MMatrix M) noexcept;
 	MMatrix __vectorcall MatrixMul(const MMatrix M1, const MMatrix& M2) noexcept;
 	MMatrix __vectorcall MatrixLookAtRH(const MVector EyePos, const MVector FocusPos, const MVector UpDir) noexcept;
 	MMatrix __vectorcall MatrixPerspectiveFovRH(float FovY, float AspectRation, float NearZ, float FarZ) noexcept;
 	MMatrix __vectorcall MatrixOrthographicRH(float ViewWidth, float ViewHeight, float NearZ, float FarZ) noexcept;
+
+	MQuaternion __vectorcall MatrixToQuaternion(const MMatrix M) noexcept;
+	
+	MMatrix __vectorcall TranslateMatrix(const MVector Pos) noexcept;
+	MMatrix __vectorcall RotateMatrix(const MQuaternion Q) noexcept;
+	MMatrix __vectorcall ScaleMatrix(const MVector Scale) noexcept;
+	MMatrix __vectorcall ModelMatrix(const MVector Pos, const MQuaternion Q, const MVector Scale) noexcept;
 
 #include "GMathConvert.inl"
 #include "GMathVector.inl"
