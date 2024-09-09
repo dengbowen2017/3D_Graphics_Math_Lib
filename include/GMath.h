@@ -15,6 +15,25 @@ namespace GMath
 	constexpr float ConvertToRadians(float Degrees) noexcept { return Degrees * MATH_PI / 180.0f; }
 	constexpr float ConvertToDegrees(float Radians) noexcept { return Radians * 180.0f / MATH_PI; }
 
+	// -------------------------
+	// Global Values
+	// -------------------------
+
+	extern const __declspec(selectany) __m128 g_VecAllZero = _mm_setzero_ps();
+	extern const __declspec(selectany) __m128 g_VecAllOne = _mm_set_ps1(1.0f);
+
+	extern const __declspec(selectany) __m128 g_MatIdentityR0 = _mm_set_ps(0, 0, 0, 1.0f);
+	extern const __declspec(selectany) __m128 g_MatIdentityR1 = _mm_set_ps(0, 0, 1.0f, 0);
+	extern const __declspec(selectany) __m128 g_MatIdentityR2 = _mm_set_ps(0, 1.0f, 0, 0);
+	extern const __declspec(selectany) __m128 g_MatIdentityR3 = _mm_set_ps(1.0f, 0, 0, 0);
+
+	extern const __declspec(selectany) __m128 g_VecMaskX = *(__m128*) & _mm_set_epi32(0x00000000, 0x00000000, 0x00000000, 0xFFFFFFFF); // wzyx
+	extern const __declspec(selectany) __m128 g_VecMaskY = *(__m128*) & _mm_set_epi32(0x00000000, 0x00000000, 0xFFFFFFFF, 0x00000000);
+	extern const __declspec(selectany) __m128 g_VecMaskZ = *(__m128*) & _mm_set_epi32(0x00000000, 0xFFFFFFFF, 0x00000000, 0x00000000);
+	extern const __declspec(selectany) __m128 g_VecMaskW = *(__m128*) & _mm_set_epi32(0xFFFFFFFF, 0x00000000, 0x00000000, 0x00000000);
+	extern const __declspec(selectany) __m128 g_VecMaskZW = *(__m128*) & _mm_set_epi32(0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0x00000000);
+	extern const __declspec(selectany) __m128 g_VecMaskXYZ = *(__m128*) & _mm_set_epi32(0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF);
+
 	// --------------------------
 	// Type Definitions
 	// --------------------------
@@ -69,6 +88,26 @@ namespace GMath
 	struct MMatrix
 	{
 		__m128 r[4];
+
+		static MMatrix Zero() noexcept
+		{
+			MMatrix mRes;
+			mRes.r[0] = g_VecAllZero;
+			mRes.r[1] = g_VecAllZero;
+			mRes.r[2] = g_VecAllZero;
+			mRes.r[3] = g_VecAllZero;
+			return mRes;
+		}
+
+		static MMatrix Identity() noexcept
+		{
+			MMatrix mRes;
+			mRes.r[0] = g_MatIdentityR0;
+			mRes.r[1] = g_MatIdentityR1;
+			mRes.r[2] = g_MatIdentityR2;
+			mRes.r[3] = g_MatIdentityR3;
+			return mRes;
+		}
 
 		MMatrix operator+() const noexcept { return *this; }
 		MMatrix operator-() const noexcept;
@@ -168,25 +207,6 @@ namespace GMath
 
 	};
 
-	// -------------------------
-	// Global Values
-	// -------------------------
-
-	extern const __declspec(selectany) __m128 g_VecAllZero = _mm_setzero_ps();
-	extern const __declspec(selectany) __m128 g_VecAllOne = _mm_set_ps1(1.0f);
-
-	extern const __declspec(selectany) __m128 g_MatIdentityR0 = _mm_set_ps(0, 0, 0, 1.0f);
-	extern const __declspec(selectany) __m128 g_MatIdentityR1 = _mm_set_ps(0, 0, 1.0f, 0);
-	extern const __declspec(selectany) __m128 g_MatIdentityR2 = _mm_set_ps(0, 1.0f, 0, 0);
-	extern const __declspec(selectany) __m128 g_MatIdentityR3 = _mm_set_ps(1.0f, 0, 0, 0);
-						
-	extern const __declspec(selectany) __m128 g_VecMaskX	= *(__m128*) & _mm_set_epi32(0x00000000, 0x00000000, 0x00000000, 0xFFFFFFFF); // wzyx
-	extern const __declspec(selectany) __m128 g_VecMaskY	= *(__m128*) & _mm_set_epi32(0x00000000, 0x00000000, 0xFFFFFFFF, 0x00000000);
-	extern const __declspec(selectany) __m128 g_VecMaskZ	= *(__m128*) & _mm_set_epi32(0x00000000, 0xFFFFFFFF, 0x00000000, 0x00000000);
-	extern const __declspec(selectany) __m128 g_VecMaskW	= *(__m128*) & _mm_set_epi32(0xFFFFFFFF, 0x00000000, 0x00000000, 0x00000000);
-	extern const __declspec(selectany) __m128 g_VecMaskZW	= *(__m128*) & _mm_set_epi32(0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0x00000000);
-	extern const __declspec(selectany) __m128 g_VecMaskXYZ	= *(__m128*) & _mm_set_epi32(0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF);
-
 	// -----------------------------
 	// Miscellaneous Operations
 	// -----------------------------
@@ -267,6 +287,9 @@ namespace GMath
 	MMatrix __vectorcall RotateMatrix(const MQuaternion Q) noexcept;
 	MMatrix __vectorcall ScaleMatrix(const MVector Scale) noexcept;
 	MMatrix __vectorcall ModelMatrix(const MVector Pos, const MQuaternion Q, const MVector Scale) noexcept;
+
+	MMatrix __vectorcall PartOfInertiaMatrix(const MVector V) noexcept; // temp
+
 
 #include "GMathConvert.inl"
 #include "GMathVector.inl"

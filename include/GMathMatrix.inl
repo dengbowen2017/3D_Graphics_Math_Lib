@@ -421,6 +421,28 @@ inline MMatrix __vectorcall ModelMatrix(const MVector Pos, const MQuaternion Q, 
 	return mRes;
 }
 
+inline MMatrix __vectorcall PartOfInertiaMatrix(const MVector V) noexcept
+{
+	MMatrix mRes;
+
+	__m128 vValue = _mm_mul_ps(V.v, V.v);
+
+	__m128 vTemp1 = _mm_and_ps(vValue, g_VecMaskX);
+	__m128 vTemp2 = _mm_shuffle_ps(V.v, V.v, _MM_SHUFFLE(0, 0, 0, 0));
+	mRes.r[0] = _mm_sub_ps(vTemp1, _mm_mul_ps(vTemp2, V.v));
+
+	vTemp1 = _mm_and_ps(vValue, g_VecMaskY);
+	vTemp2 = _mm_shuffle_ps(V.v, V.v, _MM_SHUFFLE(1, 1, 1, 1));
+	mRes.r[1] = _mm_sub_ps(vTemp1, _mm_mul_ps(vTemp2, V.v));
+
+	vTemp1 = _mm_and_ps(vValue, g_VecMaskZ);
+	vTemp2 = _mm_shuffle_ps(V.v, V.v, _MM_SHUFFLE(2, 2, 2, 2));
+	mRes.r[2] = _mm_sub_ps(vTemp1, _mm_mul_ps(vTemp2, V.v));
+
+	mRes.r[3] = g_MatIdentityR3;
+	return mRes;
+}
+
 // --------------------------
 // Matrix Overloads
 // --------------------------
