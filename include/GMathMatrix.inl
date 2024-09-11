@@ -425,7 +425,7 @@ inline MMatrix __vectorcall PartOfInertiaMatrix(const MVector V) noexcept
 {
 	MMatrix mRes;
 
-	__m128 vValue = _mm_mul_ps(V.v, V.v);
+	__m128 vValue = _mm_dp_ps(V.v, V.v, 0xff);
 
 	__m128 vTemp1 = _mm_and_ps(vValue, g_VecMaskX);
 	__m128 vTemp2 = _mm_shuffle_ps(V.v, V.v, _MM_SHUFFLE(0, 0, 0, 0));
@@ -439,7 +439,7 @@ inline MMatrix __vectorcall PartOfInertiaMatrix(const MVector V) noexcept
 	vTemp2 = _mm_shuffle_ps(V.v, V.v, _MM_SHUFFLE(2, 2, 2, 2));
 	mRes.r[2] = _mm_sub_ps(vTemp1, _mm_mul_ps(vTemp2, V.v));
 
-	mRes.r[3] = g_MatIdentityR3;
+	mRes.r[3] = g_VecAllZero;
 	return mRes;
 }
 
@@ -460,18 +460,18 @@ inline MMatrix MMatrix::operator-() const noexcept
 inline MMatrix& __vectorcall MMatrix::operator+=(const MMatrix M) noexcept
 {
 	this->r[0] = _mm_add_ps(this->r[0], M.r[0]);
-	this->r[1] = _mm_add_ps(this->r[0], M.r[1]);
-	this->r[2] = _mm_add_ps(this->r[0], M.r[2]);
-	this->r[3] = _mm_add_ps(this->r[0], M.r[3]);
+	this->r[1] = _mm_add_ps(this->r[1], M.r[1]);
+	this->r[2] = _mm_add_ps(this->r[2], M.r[2]);
+	this->r[3] = _mm_add_ps(this->r[3], M.r[3]);
 	return *this;
 }
 
 inline MMatrix& __vectorcall MMatrix::operator-=(const MMatrix M) noexcept
 {
 	this->r[0] = _mm_sub_ps(this->r[0], M.r[0]);
-	this->r[1] = _mm_sub_ps(this->r[0], M.r[1]);
-	this->r[2] = _mm_sub_ps(this->r[0], M.r[2]);
-	this->r[3] = _mm_sub_ps(this->r[0], M.r[3]);
+	this->r[1] = _mm_sub_ps(this->r[1], M.r[1]);
+	this->r[2] = _mm_sub_ps(this->r[2], M.r[2]);
+	this->r[3] = _mm_sub_ps(this->r[3], M.r[3]);
 	return *this;
 }
 

@@ -69,6 +69,7 @@ namespace GMath
 
 		MQuaternion() = default;
 		MQuaternion(float x, float y, float z, float w) noexcept : q(_mm_set_ps(w, z, y, x)) {}
+		MQuaternion(const MVector& V) noexcept : q(V.v) {}
 
 		MQuaternion operator+() const noexcept { return *this; }
 		MQuaternion operator-() const noexcept;
