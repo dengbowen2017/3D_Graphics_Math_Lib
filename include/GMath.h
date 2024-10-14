@@ -201,6 +201,19 @@ namespace GMath
 			assert(column < 4 && row < 4);
 			return m[column][row];
 		}
+
+		static Matrix4x4 Zero() noexcept
+		{
+			Matrix4x4 m;
+			for (size_t i = 0; i < 4; i++)
+			{
+				for (size_t j = 0; j < 4; j++)
+				{
+					m(i, j) = 0.0f;
+				}
+			}
+			return m;
+		}
 	};
 
 	__declspec(align(16)) struct Matrix4x4A : public Matrix4x4
@@ -289,8 +302,10 @@ namespace GMath
 	MMatrix __vectorcall ScaleMatrix(const MVector Scale) noexcept;
 	MMatrix __vectorcall ModelMatrix(const MVector Pos, const MQuaternion Q, const MVector Scale) noexcept;
 
-	MMatrix __vectorcall PartOfInertiaMatrix(const MVector V) noexcept; // temp
-
+	// temp
+	MMatrix __vectorcall PartOfInertiaMatrix(const MVector V) noexcept; 
+	MMatrix __vectorcall VectorDotVectorTranspose(const MVector V1, const MVector V2) noexcept;
+	MMatrix PolarDecomposition(const MMatrix M) noexcept;
 
 #include "GMathConvert.inl"
 #include "GMathVector.inl"
